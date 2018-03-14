@@ -122,6 +122,38 @@ check_player_signin_valid_start:
 check_player_signin_valid_end:
 
 ;---------------------------------------------------------
+; Show All Game Type Variants
+;---------------------------------------------------------
+dd			(0x31748A - ExecutableBaseAddress)
+dd			(AddGameVariantMenuOptions_end - AddGameVariantMenuOptions_start)
+AddGameVariantMenuOptions_start:
+
+		; Loop through all game type indexes we want to load
+		mov		ebx, 0
+
+	AddGameVariantMenuOptions_Loop:
+		push	ebx
+		mov		eax, [esi+70h]
+		mov		ebx, 0xD3450
+		call 	ebx
+		mov     ecx, [esi+70h]
+		mov     ecx, [ecx+44h]
+		mov     ebx, 0FFFFh
+		and     eax, ebx
+		pop		ebx
+		mov     word [ecx+eax*4+2], bx
+		inc		ebx
+		cmp		ebx, 9
+		jb		AddGameVariantMenuOptions_Loop
+		
+		; Set ebx as what it should've been
+		mov     ebx, 0FFFFh
+		
+AddGameVariantMenuOptions_mid:
+		times (0x3174D3 - (0x31748A + (AddGameVariantMenuOptions_mid - AddGameVariantMenuOptions_start))) db 0x90
+AddGameVariantMenuOptions_end:
+
+;---------------------------------------------------------
 ; 
 ;---------------------------------------------------------		
 dd			(0014F06Fh - ExecutableBaseAddress)
