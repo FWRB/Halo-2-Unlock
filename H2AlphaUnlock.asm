@@ -110,13 +110,6 @@ HACK_FUNCTION Hack_LegaleseCustomText_Hook
 HACK_DATA Hack_PrintMessageFormat
 HACK_DATA Hack_CoffeeWatermark
 
-;HACK_DATA Hack_LastBroadcastTime
-%define Hack_LastBroadcastTime							00444F2Ch
-HACK_DATA Hack_FailedToBroadcastOption
-
-
-
-
 
 ;---------------------------------------------------------
 ; Remove network requirement
@@ -125,7 +118,7 @@ dd            (0x00051945 - ExecutableBaseAddress)
 dd            (_check_network_end - _check_network_start)
 _check_network_start:
 
-		; Skip dispaying the error.
+		; Skip displaying the error.
 		jmp		(0x61 - 0x45) + $
 
 _check_network_end:
@@ -1218,13 +1211,6 @@ _Hack_LegaleseCustomText_Hook_done:
 
 _Hack_PrintMessageFormat:
 	db '[%s] %s',0
-	align 4, db 0
-
-_Hack_LastBroadcastTime:
-	dd 0
-
-_Hack_FailedToBroadcastOption:
-	db "Hack_NetworkSquadListUpdate_Hook() failed to put socket into broadcast mode!", 0Ah, 0
 	align 4, db 0
 
 _Hack_CoffeeWatermark:
