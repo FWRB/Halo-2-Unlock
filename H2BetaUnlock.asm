@@ -481,18 +481,18 @@ _Hack_NetworkSquadListUpdate_Hook_done:
 		add		esp, StackStart
 
 		; Instructions we replaced in the hook.
-		mov		al, [006DA6DCh]		; Check which tick count to use
+		mov		al, [006EB3FCh]		; Check which tick count to use
 		test	al, al
 		jz		_Hack_NetworkSquadListUpdate_Hook_use_tick_count
 
 		; Jump to trampoline.
-		push	00284355h
+		push	00292DE5h
 		ret
 
 _Hack_NetworkSquadListUpdate_Hook_use_tick_count:
 
 		; Jump to trampoline.
-		push	0028435Ch
+		push	00292DECh
 		ret
 
 		%undef broadcast_search_nonce
@@ -636,7 +636,7 @@ Hack_SendNetworkBroadcastReply_Hook_done:
 		add		esp, StackStart
 
 		; Jump back into function.
-		push	0027956Bh
+		push	002873C8h
 		ret 4
 
 		%undef game_data
