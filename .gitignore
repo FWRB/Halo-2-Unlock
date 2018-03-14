@@ -1,3 +1,9 @@
 *.bin
 *.o
 *.xbe
+*.idb
+*.i64
+*.id0
+*.id1
+*.nam
+*.til

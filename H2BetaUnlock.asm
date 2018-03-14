@@ -4,8 +4,8 @@
 BITS 32
 
 %define ExecutableBaseAddress			00010000h			; Base address of the executable
-%define HacksSegmentAddress				007f4eb0h			; Virtual address of the .hacks segment
-%define HacksSegmentOffset				005a9000h			; File offset of the .hacks segment
+%define HacksSegmentAddress				0080b990h			; Virtual address of the .hacks segment
+%define HacksSegmentOffset				005b9000h			; File offset of the .hacks segment
 %define HacksSegmentSize				00002000h			; Size of the .hacks segment
 
 ; Macros
@@ -18,56 +18,40 @@ BITS 32
 %endmacro
 
 ; Menu handler functions
-%define MenuHandler_MainMenu							001AF2F4h
-%define MenuHandler_GamertagSelect						002A33B2h
+%define MenuHandler_MainMenu							001B14ECh
+%define MenuHandler_GamertagSelect						002B05A4h
 
-%define Create_MainMenu_Campaign						002A37D7h
-%define Create_XboxLive_Menu							001AF36Ah
-%define Create_MainMenu_XboxLive						002A37B4h
-%define Create_MainMenu_SplitScreen						002A376Eh
-%define Create_MainMenu_SystemLink						002A3791h
-%define Create_MainMenu_OptionsMenu						001AF108h
+%define Create_MainMenu_Campaign						002B09C9h
+%define Create_XboxLive_Menu							001B154Ah
+%define Create_MainMenu_XboxLive						002B09A6h
+%define Create_MainMenu_SplitScreen						002B0960h
+%define Create_MainMenu_SystemLink						002B0983h
+%define Create_MainMenu_OptionsMenu						001B1300h
 
 ; Halo Engine Functions
-%define ShowSinglePlayerSettings_offset					003056C8h
-%define ShowSplitScreen_3_offset						002A37B4h ; Dumps you into the Xbox Live Menu afterwards
-%define ShowScreenError_offset							001B818Ch
-%define LoadScreen										000D68B0h
+%define LoadScreen										000D74ECh
 
-%define InitNetwork_offset								001A49F0h
-
-; void DrawText(RECT *pPosSize, DWORD Unk1, DWORD Unk2, DWORD Unk3, char *pText, DWORD Unk4);
-%define DrawText										0001C860h
 
 ; void PrintDebugMessage(int category, char *psMessage, char *psTimeStamp, bool bUnk);
-%define PrintDebugMessage								000AC020h
+%define PrintDebugMessage								000AC6D0h
 
 ; Hooked Halo Engine Screen Creation Functions
-%define CreateLegalAcceptanceScreen						000D37C9h
-%define CreateNetworkSquadBrowserScreen					001B2357h
-
-; Hooked Halo Engine Drawing Functions
-%define DrawWatermark									000D62E0h
-
-; Hook Installs, this may be in some random memory location
-; Using hacks to achieve a code cave
-%define hkInstall_XInputGetState_offset					00468CECh
-%define hkInstall_HandleGamertagSelect_offset			002A3422h
+%define CreateNetworkSquadBrowserScreen					001B4522h
 
 ; Kernel imports
-%define imp_DbgPrint									004705ECh
+%define imp_DbgPrint									0048084Ch
 
-%define g_network_link									006DA5C0h
-%define broadcast_search_globals_message_gateway		006D8EF0h
+%define g_network_link									006EB2E0h
+%define broadcast_search_globals_message_gateway		006E9C08h
 
-%define c_network_message_gateway__send_message			002679B0h
-%define _broadcast_search_globals_get_session_nonce		002842A0h
-%define get_transport_address							002FE6C0h
+%define c_network_message_gateway__send_message			002751A0h
+%define _broadcast_search_globals_get_session_nonce		00292D30h
+%define get_transport_address							00315240h
 
-%define setsockopt										0043FAB4h
-%define GetLastError									003140F3h
-%define malloc											00388A1Eh
-%define free											0038B09Dh
+%define setsockopt										0044FD14h
+%define GetLastError									0032A469h
+%define malloc											0039EE0Eh
+%define free											003A148Dh
 
 
 ; Functions in our .hacks segment.
@@ -85,72 +69,21 @@ HACK_DATA Hack_MenuHandler_MainMenu_JumpTable
 
 
 
-
-
-;---------------------------------------------------------
-; Disable EULA acceptance screen
-;---------------------------------------------------------		
-dd			(CreateLegalAcceptanceScreen - ExecutableBaseAddress)
-dd			(CreateLegalAcceptanceScreen_end - CreateLegalAcceptanceScreen_start)
-CreateLegalAcceptanceScreen_start:
-
-		; Return out of the function to disable it
-		retn
-
-CreateLegalAcceptanceScreen_end:
-
-;---------------------------------------------------------
-; Disable watermark drawing function
-;---------------------------------------------------------
-dd			(DrawWatermark - ExecutableBaseAddress)
-dd			(DrawWatermark_end - DrawWatermark_start)
-DrawWatermark_start:
-
-		%define StackSize		8h
-		%define StackStart		8h
-		%define MsgPos			-8h
-
-		; Setup stack frame.
-		sub		esp, StackStart
-
-		; Setup the watermark size/position.
-		lea		eax, [esp+StackSize+MsgPos]
-		mov		word [eax], 360			; Pos X
-		mov		word [eax+2], 250		; Pos Y
-		mov		word [eax+4], 400		; Width?
-		mov		word [eax+6], 550		; Height?
-
-		; Draw a bitch'in watermark.
-		push	0
-		push	Hack_CoffeeWatermark
-		push	0
-		push	0
-		push	0
-		push	eax
-		mov		eax, DrawText
-		call	eax
-
-		; Destroy stack frame and return.
-		add		esp, StackStart
-		retn
-
-DrawWatermark_end:
-
 ;---------------------------------------------------------
 ; 
 ;---------------------------------------------------------		
-dd			(0014D3CFh - ExecutableBaseAddress)
+dd			(0014F06Fh - ExecutableBaseAddress)
 dd			(patch_log_leve_end - patch_log_level_start)
 patch_log_level_start:
 
-		mov		dword [580C88h], 0
+		mov		dword [59A010h], 0
 
 patch_log_leve_end:
 
 ;---------------------------------------------------------
 ; Print network debug messages
 ;---------------------------------------------------------		
-dd			(0014CE95h - ExecutableBaseAddress)
+dd			(0014EB26h - ExecutableBaseAddress)
 dd			(patch_print_net_dbg_end - patch_print_net_dbg_start)
 patch_print_net_dbg_start:
 
@@ -207,7 +140,7 @@ MenuHandler_GamertagSelect_end:
 ;---------------------------------------------------------
 ; Hook network squad list function that updates available sessions to jump into hacks segment
 ;---------------------------------------------------------
-dd			(0028434Ch - ExecutableBaseAddress)
+dd			(00292DDCh - ExecutableBaseAddress)
 dd			(_network_squad_list_update_end - _network_squad_list_update_start)
 _network_squad_list_update_start:
 
@@ -220,7 +153,7 @@ _network_squad_list_update_end:
 ;---------------------------------------------------------
 ; Hook the function that sends the broadcast reply
 ;---------------------------------------------------------
-dd			(0027950Eh - ExecutableBaseAddress)
+dd			(0028736Ch - ExecutableBaseAddress)
 dd			(_send_broadcast_reply_end - _send_broadcast_reply_start)
 _send_broadcast_reply_start:
 
@@ -232,16 +165,6 @@ _send_broadcast_reply_start:
 
 _send_broadcast_reply_end:
 
-;---------------------------------------------------------
-; Field of view hack
-;---------------------------------------------------------		
-dd			(00103F6Dh - ExecutableBaseAddress)
-dd			(_field_of_view_hack_end - _field_of_view_hack_start)
-_field_of_view_hack_start:
-
-		movss	xmm0, [Hack_FieldOfView]
-
-_field_of_view_hack_end:
 
 ;---------------------------------------------------------
 ; .hacks code segment
@@ -328,12 +251,6 @@ _Hack_MenuHandler_MainMenu_campaign:
 _Hack_MenuHandler_MainMenu_xbox_live:
 
 		; Setup xbox live menu.
-		;mov		esi, dword [esp+StackSize+Unk1]
-		;push	ecx
-		;mov		eax, Create_XboxLive_Menu
-		;call	eax
-
-		; Setup campaign menu.
 		push	Create_MainMenu_XboxLive		; Create menu function
 		push	4
 		push	5
@@ -733,28 +650,8 @@ Hack_SendNetworkBroadcastReply_Hook_done:
 		align 4, db 0
 
 _Hack_PrintMessageFormat:
-	db '[%s] %s',0
-	align 4, db 0
-
-_Hack_FieldOfView:
-	dd 1.5
-
-_Hack_CoffeeWatermark:
-	db "Grim Rocks Halo's Socks", 0
-	;db	"//\"
-	;db	"V  \"
-	;db	" \  \_"
-	;db	"  \,'.`-."
-	;db	"   \\ `. `.       "
-	;db	"   ( \  `. `-.                        _,.-:\"
-	;db	"	\ \    `.  `-._             __..--' ,-';/"
-	;db	"	 \ `.    `-.   `-..___..---'   _.--' ,'/"
-	;db	"	  `. `.     `-._        __..--'    ,' /"
-	;db	"		`. `-_      ``--..''       _.-' ,'"
-	;db	"		  `-_ `-.___        __,--'   ,'"
-	;db	"			 `-.__  `----'''    __.-'"
-	;db	"                  `--..____..--'"
-	align 4, db 0
+		db '[%s] %s',0
+		align 4, db 0
 
 _hacks_code_end:
 
