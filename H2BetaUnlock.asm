@@ -209,7 +209,7 @@ dd			(0014F06Fh - ExecutableBaseAddress)
 dd			(patch_log_leve_end - patch_log_level_start)
 patch_log_level_start:
 
-		mov		dword [59A010h], 0
+;		mov		dword [59A010h], 0
 
 patch_log_leve_end:
 
@@ -220,8 +220,8 @@ dd			(0014EB26h - ExecutableBaseAddress)
 dd			(patch_print_net_dbg_end - patch_print_net_dbg_start)
 patch_print_net_dbg_start:
 
-		nop
-		nop
+;		nop
+;		nop
 
 patch_print_net_dbg_end:
 
@@ -233,8 +233,8 @@ dd			(PrintDebugMessageHook_end - PrintDebugMessageHook_start)
 PrintDebugMessageHook_start:
 
 		; Jump to detour function.
-		mov		eax, Hack_PrintDebugMessage
-		jmp		eax
+;		mov		eax, Hack_PrintDebugMessage
+;		jmp		eax
 
 PrintDebugMessageHook_end:
 
@@ -334,7 +334,6 @@ _Hack_GameVariantCategoryMenuOptionTable:
 		dd 		GameVariant_Oddball
 		dd 		GameVariant_Juggernaut
 		dd 		GameVariant_Headhunter
-
 
 		;---------------------------------------------------------
 		; void Hack_PrintDebugMessage(int category, char *psMessage, char *psTimeStamp, bool bUnk)
