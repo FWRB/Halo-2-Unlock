@@ -31,6 +31,17 @@ BITS 32
 ; Halo Engine Functions
 %define LoadScreen										000D74ECh
 
+; Halo Game Variant Types
+%define GameVariant_Slayer								0
+%define GameVariant_CTF									6
+%define GameVariant_Assault								7
+%define GameVariant_Territories							8
+%define GameVariant_KOTH								1
+%define GameVariant_Race								2
+%define GameVariant_Oddball								3
+%define GameVariant_Juggernaut							4
+%define GameVariant_Headhunter							5
+
 ; void PrintDebugMessage(int category, char *psMessage, char *psTimeStamp, bool bUnk);
 %define PrintDebugMessage								000AC6D0h
 
@@ -64,6 +75,7 @@ HACK_FUNCTION Hack_LegaleseCustomText_Hook
 
 HACK_DATA Hack_PrintMessageFormat
 HACK_DATA Hack_CoffeeWatermark
+HACK_DATA Hack_GameVariantCategoryMenuOptionTable
 
 
 HACK_DATA Hack_MenuHandler_MainMenu_JumpTable
@@ -158,6 +170,7 @@ AddGameVariantMenuOptions_start:
 		mov		ebx, 0
 
 	AddGameVariantMenuOptions_Loop:
+		; Backup our index (ebx), run original code, restore our index.
 		push	ebx
 		mov		eax, [esi+70h]
 		mov		ebx, 0xD3450
@@ -167,7 +180,17 @@ AddGameVariantMenuOptions_start:
 		mov     ebx, 0FFFFh
 		and     eax, ebx
 		pop		ebx
+
+		; Use our index into our game variant table to grab the enum value
+		push 	ebx
+		push 	ecx
+		mov 	ecx, Hack_GameVariantCategoryMenuOptionTable
+		mov     ebx, dword [ecx+ebx*4]
+		pop		ecx
+
+		; Add category with the given enum option
 		mov     word [ecx+eax*4+2], bx
+		pop		ebx
 		inc		ebx
 		cmp		ebx, 9
 		jb		AddGameVariantMenuOptions_Loop
@@ -282,6 +305,21 @@ _send_broadcast_reply_end:
 dd			HacksSegmentOffset
 dd			(_hacks_code_end - _hacks_code_start)
 _hacks_code_start:
+
+_Hack_GameVariantCategoryMenuOptionTable:
+		;---------------------------------------------------------
+		; Game Variant Category Menu Option Table
+		;---------------------------------------------------------
+		dd 		GameVariant_Slayer
+		dd 		GameVariant_CTF
+		dd 		GameVariant_Assault
+		dd 		GameVariant_Territories
+		dd 		GameVariant_KOTH
+		dd 		GameVariant_Race
+		dd 		GameVariant_Oddball
+		dd 		GameVariant_Juggernaut
+		dd 		GameVariant_Headhunter
+
 
 		;---------------------------------------------------------
 		; void Hack_PrintDebugMessage(int category, char *psMessage, char *psTimeStamp, bool bUnk)
