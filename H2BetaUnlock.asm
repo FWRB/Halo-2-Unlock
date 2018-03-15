@@ -233,8 +233,8 @@ dd			(PrintDebugMessageHook_end - PrintDebugMessageHook_start)
 PrintDebugMessageHook_start:
 
 		; Jump to detour function.
-		push	Hack_PrintDebugMessage
-		ret
+		mov		eax, Hack_PrintDebugMessage
+		jmp		eax
 
 PrintDebugMessageHook_end:
 
@@ -246,8 +246,8 @@ dd			(MenuHandler_MainMenu_end - MenuHandler_MainMenu_start)
 MenuHandler_MainMenu_start:
 
 		; Hook to detour.
-		push	Hack_MenuHandler_MainMenu
-		ret
+		mov 	eax, Hack_MenuHandler_MainMenu
+		jmp 	eax
 
 MenuHandler_MainMenu_end:
 
@@ -262,8 +262,8 @@ MenuHandler_GamertagSelect_start:
 		%define GamertagSelect_Target	0C2h
 
 		; Skip checks for xbl stuff.
-		push		(MenuHandler_GamertagSelect + GamertagSelect_Target)
-		ret
+		mov 		ecx, (MenuHandler_GamertagSelect + GamertagSelect_Target)
+		jmp 		ecx
 
 		%undef GamertagSelect_Target
 		%undef GamertagSelect_Base
@@ -278,8 +278,8 @@ dd			(_network_squad_list_update_end - _network_squad_list_update_start)
 _network_squad_list_update_start:
 
 		; Jump into hacks segment.
-		push	Hack_NetworkSquadListUpdate_Hook
-		ret
+		mov		eax, Hack_NetworkSquadListUpdate_Hook
+		jmp		eax
 
 _network_squad_list_update_end:
 
@@ -293,8 +293,8 @@ _send_broadcast_reply_start:
 		; Jump into hacks segment.
 		lea		eax, [esp+38h]		; game_data structure
 		push	eax
-		push	Hack_SendNetworkBroadcastReply_Hook
-		ret
+		mov		eax, Hack_SendNetworkBroadcastReply_Hook
+		jmp		eax
 
 _send_broadcast_reply_end:
 
@@ -649,14 +649,14 @@ _Hack_NetworkSquadListUpdate_Hook_done:
 		jz		_Hack_NetworkSquadListUpdate_Hook_use_tick_count
 
 		; Jump to trampoline.
-		push	00292DE5h
-		ret
+		mov		eax, 00292DE5h
+		jmp		eax
 
 _Hack_NetworkSquadListUpdate_Hook_use_tick_count:
 
 		; Jump to trampoline.
-		push	00292DECh
-		ret
+		mov		eax, 00292DECh
+		jmp		eax
 
 		%undef broadcast_search_nonce
 		%undef broadcast_search_version
@@ -799,8 +799,9 @@ Hack_SendNetworkBroadcastReply_Hook_done:
 		add		esp, StackStart
 
 		; Jump back into function.
-		push	002873C8h
-		ret 4
+		pop		eax					; Bullshit because we can't push ret 4
+		mov		eax, 002873C8h
+		jmp		eax
 
 		%undef game_data
 		%undef transport_addr
