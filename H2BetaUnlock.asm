@@ -298,6 +298,21 @@ _send_broadcast_reply_start:
 
 _send_broadcast_reply_end:
 
+;---------------------------------------------------------
+; Stop clients from crashing when negotiating new host
+;---------------------------------------------------------
+dd			(001CDBE8h - ExecutableBaseAddress)
+dd			(_change_host_sim_check_end - _change_host_sim_check_start)
+_change_host_sim_check_start:
+
+		; Don't assert when checking if game simulation recording is enabled.
+		mov		al, 0
+		nop
+		nop
+		nop
+
+_change_host_sim_check_end:
+
 
 ;---------------------------------------------------------
 ; .hacks code segment
