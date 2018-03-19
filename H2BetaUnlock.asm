@@ -129,7 +129,7 @@ _crash_report_send_start:
 
 		; Skip sending debug report.
 		mov		al, 1
-		retn 4
+		retn 	4
 
 _crash_report_send_end:
 
@@ -144,6 +144,9 @@ _i_dont_agree_start:
 		pop esi
 		retn 8
 
+_i_dont_agree_mid:
+		; Backwards compatibility will try to prefetch this and crash.
+		times (0x1B1263 - (0x01B125C + (_i_dont_agree_mid - _i_dont_agree_start))) db 0x90
 _i_dont_agree_end:
 
 ;---------------------------------------------------------
@@ -206,12 +209,12 @@ AddGameVariantMenuOptions_end:
 ; 
 ;---------------------------------------------------------		
 dd			(0014F06Fh - ExecutableBaseAddress)
-dd			(patch_log_leve_end - patch_log_level_start)
+dd			(patch_log_level_end - patch_log_level_start)
 patch_log_level_start:
 
 ;		mov		dword [59A010h], 0
 
-patch_log_leve_end:
+patch_log_level_end:
 
 ;---------------------------------------------------------
 ; Print network debug messages
