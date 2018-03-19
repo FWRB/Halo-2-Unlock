@@ -3,20 +3,17 @@
 ; ////////////////////////////////////////////////////////
 BITS 32
 
+;-------------------------------------------------------------
+; Executable Definitions
+;-------------------------------------------------------------	
 %define ExecutableBaseAddress			00010000h			; Base address of the executable
 %define HacksSegmentAddress				0080b990h			; Virtual address of the .hacks segment
 %define HacksSegmentOffset				005b9000h			; File offset of the .hacks segment
 %define HacksSegmentSize				00002000h			; Size of the .hacks segment
 
-; Macros
-%macro HACK_FUNCTION 1
-	%define %1			HacksSegmentAddress + (_%1 - _hacks_code_start)
-%endmacro
-
-%macro HACK_DATA 1
-	%define %1			HacksSegmentAddress + (_%1 - _hacks_code_start)
-%endmacro
-
+;-------------------------------------------------------------
+; Game Definitions
+;-------------------------------------------------------------	
 ; Menu handler functions
 %define MenuHandler_MainMenu							001B14ECh
 %define MenuHandler_GamertagSelect						002B05A4h
@@ -63,6 +60,17 @@ BITS 32
 %define malloc											0039EE0Eh
 %define free											003A148Dh
 
+;-------------------------------------------------------------
+; Function Definitions
+;-------------------------------------------------------------	
+; Macros
+%macro HACK_FUNCTION 1
+	%define %1			HacksSegmentAddress + (_%1 - _hacks_code_start)
+%endmacro
+
+%macro HACK_DATA 1
+	%define %1			HacksSegmentAddress + (_%1 - _hacks_code_start)
+%endmacro
 
 ; Functions in our .hacks segment.
 HACK_FUNCTION Hack_PrintDebugMessage
@@ -76,7 +84,6 @@ HACK_FUNCTION Hack_LegaleseCustomText_Hook
 HACK_DATA Hack_PrintMessageFormat
 HACK_DATA Hack_EULA_Watermark
 HACK_DATA Hack_GameVariantCategoryMenuOptionTable
-
 
 HACK_DATA Hack_MenuHandler_MainMenu_JumpTable
 
@@ -105,7 +112,7 @@ HACK_DATA Hack_MenuHandler_MainMenu_JumpTable
 	_i_dont_agree_start:
 
 			; Skip the call.
-			pop esi
+			pop		esi
 			retn 8
 
 	_i_dont_agree_mid:
@@ -308,7 +315,7 @@ HACK_DATA Hack_MenuHandler_MainMenu_JumpTable
 
 			; Skip sending debug report.
 			mov		al, 1
-			retn 	4
+			retn 4
 
 	_crash_report_send_end:
 
@@ -338,7 +345,6 @@ HACK_DATA Hack_MenuHandler_MainMenu_JumpTable
 			db 0EBh
 
 	_fp_assert_end:
-
 
 ;---------------------------------------------------------
 ; .hacks code segment

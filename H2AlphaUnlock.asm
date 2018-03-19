@@ -3,20 +3,17 @@
 ; ////////////////////////////////////////////////////////
 BITS 32
 
+;-------------------------------------------------------------
+; Executable Definitions
+;-------------------------------------------------------------	
 %define ExecutableBaseAddress			00010000h			; Base address of the executable
 %define HacksSegmentAddress				00abc820h			; Virtual address of the .hacks segment
 %define HacksSegmentOffset				0048e000h			; File offset of the .hacks segment
 %define HacksSegmentSize				00002000h			; Size of the .hacks segment
 
-; Macros
-%macro HACK_FUNCTION 1
-	%define %1			HacksSegmentAddress + (_%1 - _hacks_code_start)
-%endmacro
-
-%macro HACK_DATA 1
-	%define %1			HacksSegmentAddress + (_%1 - _hacks_code_start)
-%endmacro
-
+;-------------------------------------------------------------
+; Game Definitions
+;-------------------------------------------------------------	
 ; Menu handler functions
 %define MenuHandler_MainMenu							000DA3D0h
 %define MenuHandler_GamertagSelect						000DB970h
@@ -86,6 +83,17 @@ BITS 32
 ; Kernel imports
 %define imp_DbgPrint									0037F734h
 
+;-------------------------------------------------------------
+; Function Definitions
+;-------------------------------------------------------------	
+; Macros
+%macro HACK_FUNCTION 1
+	%define %1			HacksSegmentAddress + (_%1 - _hacks_code_start)
+%endmacro
+
+%macro HACK_DATA 1
+	%define %1			HacksSegmentAddress + (_%1 - _hacks_code_start)
+%endmacro
 
 ; Functions in our .hacks segment.
 HACK_FUNCTION Hack_PrintDebugMessage
