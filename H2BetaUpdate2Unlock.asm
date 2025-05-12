@@ -200,7 +200,7 @@ HACK_DATA Hack_MenuHandler_MainMenu_JumpTable
     ;---------------------------------------------------------
     ; Show All Game Type Variants
     ;---------------------------------------------------------
-    dd          (0x307773 - ExecutableBaseAddress)
+    dd          (0x3063C6 - ExecutableBaseAddress)
     dd          (AddGameVariantMenuOptions_end - AddGameVariantMenuOptions_start)
     AddGameVariantMenuOptions_start:
 
