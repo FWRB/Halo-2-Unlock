@@ -14,7 +14,10 @@ The patches for the Halo 2 Alpha/Beta builds contain the following changes:
 ## Installation
 You can find precompiled versions of the patches in the releases section. You'll need [XDelta](https://www.romhacking.net/utilities/598/) to apply the patch files to the clean alpha/beta executable files. They should have the following SHA1 hashes:
 - Halo 2 Alpha default.xbe: 43A1B01EB741DDEC7968FBD2240A938526655206
+- Halo 2 Beta TU 1 default.xbe: 80F3BF79E60D7F08A9BEFC8866BF626324142D5D
+- Halo 2 Beta TU 2 default.xbe: F2A79EC5602B210D8AE33FF2600B5AABA9093DB4
 - Halo 2 Beta TU 3 default.xbe: AF4C19C73DFF53677744F3359A2A7B16A236187C
+- Halo 2 Beta TU 4 default.xbe: D496B362910D00C1D9271CD4489B512203DDFC24
 
 To apply the patch run XDelta UI and select patch file and default.xbe file for the version of the game you want to patch. Halo 2 Alpha should use the H2AlphaUnlock.xdelta patch and default.xbe file from the game files. Halo 2 Beta should use the H2BetaUnlock.xdelta patch and default.xbe from the title update 3 content package. Once the patch is applied copy the output xbe file to your Xbox console alongside the other game files.
 
