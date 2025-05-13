@@ -43,7 +43,7 @@ BITS 32
 %define imp_DbgPrint                                    0048516Ch
 
 %define g_network_link                                  006F15E0h
-%define broadcast_search_globals_message_gateway        006F8A58h
+%define broadcast_search_globals_message_gateway        006EFF0Ch
 
 %define c_network_message_gateway__send_message         00278A60h
 %define _broadcast_search_globals_get_session_nonce     00296650h
