@@ -839,7 +839,7 @@ HACK_DATA Hack_MenuHandler_MainMenu_JumpTable
 
             ; Jump back into function.
             pop     eax                 ; Bullshit because we can't push ret 4
-            mov     eax, 0028A47Fh
+            mov     eax, 0028A478h      ; land on the lea that initializes EAX for the buffer scrub loop
             jmp     eax
 
             %undef game_data
