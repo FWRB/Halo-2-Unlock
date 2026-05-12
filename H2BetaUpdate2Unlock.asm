@@ -15,7 +15,7 @@ BITS 32
 %define MenuHandler_GamertagSelect                      002A7AA9h
 
 %define Create_MainMenu_Campaign                        002A7ECEh
-%define Create_XboxLive_Menu                            001AF41Ah
+%define Create_XboxLive_Menu                            001B0EA7h
 %define Create_MainMenu_XboxLive                        002A7EABh
 %define Create_MainMenu_SplitScreen                     002A7E65h
 %define Create_MainMenu_SystemLink                      002A7E88h
