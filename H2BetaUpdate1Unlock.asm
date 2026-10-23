@@ -124,6 +124,17 @@ HACK_DATA Hack_MenuHandler_MainMenu_JumpTable
             
     _i_dont_agree_end:
 
+	;---------------------------------------------------------
+    ; Allow arranged games (g_network_configuration+0x828 defaults to 1 in TU1/TU2, 0 in TU3/TU4)
+    ;---------------------------------------------------------
+    dd          (00268C77h - ExecutableBaseAddress)
+    dd          (_arranged_games_default_end - _arranged_games_default_start)
+    _arranged_games_default_start:
+
+            mov     byte [006D9200h], 0
+
+    _arranged_games_default_end:
+
     ;---------------------------------------------------------
     ; Hook MenuHandler_MainMenu
     ;---------------------------------------------------------      
@@ -328,7 +339,7 @@ HACK_DATA Hack_MenuHandler_MainMenu_JumpTable
     _crash_report_send_end:
 
     ;---------------------------------------------------------
-    ; Stop clients from crashing when negotiating new host                                 ; game_results_get_game_recording Does not exist in TU1 or TU2. 
+    ; Stop clients from crashing when negotiating new host                                 ; game_results_get_game_recording is game_results_recording in TU1/TU2  
     ;---------------------------------------------------------
 ;    dd          (001CDBE8h - ExecutableBaseAddress)
 ;    dd          (_change_host_sim_check_end - _change_host_sim_check_start)
