@@ -180,6 +180,17 @@ HACK_DATA Hack_MenuHandler_MainMenu_JumpTable
 
     check_player_signin_valid_end:
 
+	;---------------------------------------------------------
+    ; Skip "maximum_player_count>0" assert in host selection (TU1 only)
+    ;---------------------------------------------------------
+    dd          (002B3B9Eh - ExecutableBaseAddress)
+    dd          (_max_player_assert_end - _max_player_assert_start)
+    _max_player_assert_start:
+
+            jmp     short (002B3BC8h - 002B3B9Eh) + $
+
+    _max_player_assert_end:
+
     ;---------------------------------------------------------
     ; Hook network squad list function that updates available sessions to jump into hacks segment
     ;---------------------------------------------------------
@@ -783,7 +794,7 @@ HACK_DATA Hack_MenuHandler_MainMenu_JumpTable
             rep stosd               ; memset(&transport_addr, 0, sizeof(transport_addr));
 
             ; Convert the broadcast sockaddr to a transport address structure.
-            lea     edi, [esp+StackSize+broadcast_sockaddr]     ; &broadcast_sockaddr
+            lea     eax, [esp+StackSize+broadcast_sockaddr]     ; &broadcast_sockaddr
             lea     esi, [esp+StackSize+transport_addr]         ; &transport_addr
             push    16                                          ; sizeof(sockaddr_in)
             mov     ecx, get_transport_address
