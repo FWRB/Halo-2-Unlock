@@ -124,6 +124,17 @@ HACK_DATA Hack_MenuHandler_MainMenu_JumpTable
             
     _i_dont_agree_end:
 
+	;---------------------------------------------------------
+    ; Allow arranged games (g_network_configuration+0x828 defaults to 1 in TU1/TU2, 0 in TU3/TU4)
+    ;---------------------------------------------------------
+    dd          (0026B6BDh - ExecutableBaseAddress)
+    dd          (_arranged_games_default_end - _arranged_games_default_start)
+    _arranged_games_default_start:
+
+            mov     byte [006E0F68h], 0
+
+    _arranged_games_default_end:
+
     ;---------------------------------------------------------
     ; Hook MenuHandler_MainMenu
     ;---------------------------------------------------------      
@@ -328,20 +339,20 @@ HACK_DATA Hack_MenuHandler_MainMenu_JumpTable
     _crash_report_send_end:
 
     ;---------------------------------------------------------
-    ; Stop clients from crashing when negotiating new host                                    ; !game_results_get_game_recording()] is missing in TU2?
-    ;---------------------------------------------------------
-;    dd          (001CDBE8h - ExecutableBaseAddress)
-;    dd          (_change_host_sim_check_end - _change_host_sim_check_start)
-;    _change_host_sim_check_start:;
-;
+    ; Stop clients from crashing when negotiating new host                                    ; game_results_get_game_recording is game_results_recording in TU1/TU2
+    ;--------------------------------------------------------- 
+    dd          (001C8E71h - ExecutableBaseAddress)
+    dd          (_change_host_sim_check_end - _change_host_sim_check_start)
+    _change_host_sim_check_start:;
+
             ; Don't assert when checking if game simulation recording is enabled.
-;            mov     al, 0
-;            nop
-;            nop
-;            nop
-;
-;    _change_host_sim_check_end:
-;
+            mov     al, 0
+            nop
+            nop
+            nop
+
+    _change_host_sim_check_end:
+
     ;---------------------------------------------------------
     ; Patch math assert (zedd's fix, helps 360 backcompat)
     ;---------------------------------------------------------      
